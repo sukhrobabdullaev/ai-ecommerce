@@ -114,8 +114,8 @@ export function CartSidebar() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Button className="w-full" size="lg">
-                                        Proceed to Checkout
+                                    <Button className="w-full" size="lg" asChild>
+                                        <a href="/checkout">Proceed to Checkout</a>
                                     </Button>
                                     <Button variant="outline" className="w-full" onClick={clearCart}>
                                         Clear Cart

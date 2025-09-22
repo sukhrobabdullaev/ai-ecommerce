@@ -1,32 +1,16 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingCart, Heart, Menu, Mic, User } from 'lucide-react';
+import { ShoppingCart, Heart, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useCartStore } from '@/store/cart-store';
 import { useFavoritesStore } from '@/store/favorites-store';
-import { useSearchStore } from '@/store/search-store';
-import { VoiceSearch } from './voice-search';
-import { SearchSuggestions } from './search-suggestions';
 
 export function Header() {
-    const [isSearchFocused, setIsSearchFocused] = useState(false);
     const { getTotalItems, openCart } = useCartStore();
     const { getFavoriteCount } = useFavoritesStore();
-    const { filters, setQuery, addToHistory } = useSearchStore();
-
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (filters.query.trim()) {
-            addToHistory(filters.query);
-            // TODO: Implement search logic
-        }
-    };
-
     const totalItems = getTotalItems();
     const favoriteCount = getFavoriteCount();
 
@@ -42,57 +26,22 @@ export function Header() {
                         <span className="font-bold text-xl">Ecommerce</span>
                     </Link>
 
-                    {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center space-x-6">
-                        <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
-                            Home
-                        </Link>
-                        <Link href="/categories" className="text-sm font-medium hover:text-primary transition-colors">
-                            Categories
-                        </Link>
-                        <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
-                            About
-                        </Link>
-                    </nav>
-
-                    {/* Search Bar */}
-                    <div className="flex-1 max-w-lg mx-4 relative">
-                        <form onSubmit={handleSearch} className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                            <Input
-                                type="text"
-                                placeholder="Search for products... (e.g., 'running shoes under $150')"
-                                value={filters.query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                onFocus={() => setIsSearchFocused(true)}
-                                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                                className="pl-10 pr-20 h-10 rounded-full border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                            />
-                            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
-                                <VoiceSearch />
-                                <Button type="submit" size="sm" className="h-6 px-3 rounded-full">
-                                    Search
-                                </Button>
-                            </div>
-                        </form>
-
-                        {/* Search Suggestions */}
-                        {isSearchFocused && <SearchSuggestions />}
-                    </div>
-
-                    {/* Action Buttons */}
+                    {/* Action Buttons */
+                    }
                     <div className="flex items-center space-x-2">
                         {/* Favorites */}
-                        <Button variant="ghost" size="icon" className="relative">
-                            <Heart className="h-5 w-5" />
-                            {favoriteCount > 0 && (
-                                <Badge
-                                    variant="destructive"
-                                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                                >
-                                    {favoriteCount}
-                                </Badge>
-                            )}
+                        <Button variant="ghost" size="icon" className="relative" asChild>
+                            <Link href="/wishlist">
+                                <Heart className="h-5 w-5" />
+                                {favoriteCount > 0 && (
+                                    <Badge
+                                        variant="destructive"
+                                        className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                                    >
+                                        {favoriteCount}
+                                    </Badge>
+                                )}
+                            </Link>
                         </Button>
 
                         {/* Cart */}

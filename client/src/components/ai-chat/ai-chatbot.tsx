@@ -365,8 +365,8 @@ export function AIChatbot({ isOpen, onClose }: AIChatbotProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-in fade-in duration-300">
-            <Card className="w-full max-w-md h-[600px] flex flex-col chat-modal-enter overflow-y-auto">
+        <div className="fixed right-6 bottom-24 z-50 w-[90vw] max-w-md animate-in fade-in duration-200">
+            <Card className="w-full h-[600px] flex flex-col shadow-2xl overflow-y-auto">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                     <CardTitle className="flex items-center space-x-2">
                         <Bot className="h-5 w-5 text-primary" />

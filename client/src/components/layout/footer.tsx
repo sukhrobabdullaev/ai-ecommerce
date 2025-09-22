@@ -84,17 +84,17 @@ export function Footer() {
                         <div className="space-y-3">
                             <div className="flex items-center space-x-3">
                                 <Mail className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-sm text-muted-foreground">support@aiecommerce.com</span>
+                                <span className="text-sm text-muted-foreground">sukhrobtech@gmail.com</span>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-sm text-muted-foreground">+1 (555) 123-4567</span>
+                                <span className="text-sm text-muted-foreground">+82 010 7656 1964</span>
                             </div>
                             <div className="flex items-start space-x-3">
                                 <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                                 <span className="text-sm text-muted-foreground">
-                                    123 AI Street<br />
-                                    Tech City, TC 12345
+                                    Kookmin University, Seoungbuk-gu<br />
+                                    Seoul, South Korea
                                 </span>
                             </div>
                         </div>
@@ -104,7 +104,7 @@ export function Footer() {
                 <div className="border-t mt-8 pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                         <p className="text-sm text-muted-foreground">
-                            © 2024 AI Ecommerce. All rights reserved.
+                            © 2025 SukhrobTech. All rights reserved.
                         </p>
                         <div className="flex space-x-6">
                             <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">

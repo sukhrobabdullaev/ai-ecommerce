@@ -1,32 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ProductGrid } from '@/components/product/product-grid';
 import { AISearch } from '@/components/search/ai-search';
 import { SearchFilters } from '@/components/search/search-filters';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Filter, Grid, List, Sparkles, TrendingUp, Star, Zap } from 'lucide-react';
+import { Filter, Sparkles, TrendingUp, Star, Zap } from 'lucide-react';
 import { mockProducts } from '@/data/mock-products';
 import { Product } from '@/types';
+import { useSearchStore } from '@/store/search-store';
 
 export function HomePage() {
-    const [products, setProducts] = useState<Product[]>(mockProducts);
+    const { filters } = useSearchStore();
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(mockProducts);
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [viewMode] = useState<'grid' | 'list'>('grid');
     const [showFilters, setShowFilters] = useState(false);
 
     // Mock AI recommendations
     const aiRecommendedProducts = mockProducts
         .filter(product => product.aiRecommendation)
         .slice(0, 4);
-
-    const featuredProducts = mockProducts.slice(0, 8);
-    const trendingProducts = mockProducts
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, 6);
 
     const handleSearch = (query: string) => {
         console.log('Searching for:', query);
@@ -37,10 +33,68 @@ export function HomePage() {
         setFilteredProducts(results);
     };
 
-    const handleFilterChange = () => {
-        // Filter logic will be implemented here
-        setFilteredProducts(products);
+    const handleFilterChange = (results: Product[]) => {
+        setFilteredProducts(results);
     };
+
+    const computedProducts = useMemo(() => {
+        let results = [...mockProducts];
+
+        // Query filter
+        if (filters.query && filters.query.trim()) {
+            const q = filters.query.toLowerCase();
+            results = results.filter(p =>
+                (
+                    p.name + ' ' + p.description + ' ' + p.brand + ' ' + p.category + ' ' + (p.tags || []).join(' ')
+                ).toLowerCase().includes(q)
+            );
+        }
+
+        // Category
+        if (filters.category) {
+            results = results.filter(p => p.category === filters.category);
+        }
+
+        // Brand
+        if (filters.brand) {
+            results = results.filter(p => p.brand === filters.brand);
+        }
+
+        // Rating
+        if (filters.rating) {
+            results = results.filter(p => p.rating >= filters.rating!);
+        }
+
+        // In Stock
+        if (filters.inStock) {
+            results = results.filter(p => p.inStock);
+        }
+
+        // Price range
+        results = results.filter(p => p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]);
+
+        // Sort
+        switch (filters.sortBy) {
+            case 'price-low':
+                results.sort((a, b) => a.price - b.price);
+                break;
+            case 'price-high':
+                results.sort((a, b) => b.price - a.price);
+                break;
+            case 'rating':
+                results.sort((a, b) => b.rating - a.rating);
+                break;
+            case 'newest':
+                // No createdAt in mock; use id desc as proxy
+                results.sort((a, b) => Number(b.id) - Number(a.id));
+                break;
+            default:
+                // relevance: keep current order
+                break;
+        }
+
+        return results;
+    }, [filters]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -132,31 +186,14 @@ export function HomePage() {
                                 <div>
                                     <h2 className="text-2xl font-bold">All Products</h2>
                                     <p className="text-muted-foreground">
-                                        {filteredProducts.length} products found
+                                        {computedProducts.length} products found
                                     </p>
-                                </div>
-
-                                <div className="flex items-center space-x-2">
-                                    <Button
-                                        variant={viewMode === 'grid' ? 'default' : 'outline'}
-                                        size="sm"
-                                        onClick={() => setViewMode('grid')}
-                                    >
-                                        <Grid className="h-4 w-4" />
-                                    </Button>
-                                    <Button
-                                        variant={viewMode === 'list' ? 'default' : 'outline'}
-                                        size="sm"
-                                        onClick={() => setViewMode('list')}
-                                    >
-                                        <List className="h-4 w-4" />
-                                    </Button>
                                 </div>
                             </div>
 
                             {/* Products Grid */}
                             <ProductGrid
-                                products={filteredProducts}
+                                products={computedProducts}
                                 columns={viewMode === 'grid' ? 4 : 1}
                             />
                         </div>
