@@ -45,34 +45,37 @@ export function HomePage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="gradient-bg text-white py-20">
-                <div className="container mx-auto px-4 text-center">
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        <h1 className="text-4xl md:text-6xl font-bold">
-                            Shop with AI Intelligence
-                        </h1>
-                        <p className="text-xl md:text-2xl text-white/90">
-                            Discover products through natural conversation, voice search, and personalized AI recommendations
-                        </p>
+            <section className="gradient-bg text-white py-24">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        {/* Header Content */}
+                        <div className="text-center space-y-6 mb-12">
+                            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+                                Shop with AI Intelligence
+                            </h1>
+                            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+                                Discover products through natural conversation, voice search, and personalized AI recommendations
+                            </p>
+                        </div>
 
-                        {/* AI Search in Hero */}
-                        <div className="max-w-2xl mx-auto mt-8">
+                        {/* AI Search Section */}
+                        <div className="flex justify-center mb-16">
                             <AISearch onSearch={handleSearch} onResults={handleSearchResults} />
                         </div>
 
                         {/* Quick Stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-                            <div className="text-center">
-                                <div className="text-3xl font-bold">10K+</div>
-                                <div className="text-white/80">Products</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                            <div className="text-center space-y-2">
+                                <div className="text-4xl font-bold">10K+</div>
+                                <div className="text-white/80 text-lg">Products</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold">98%</div>
-                                <div className="text-white/80">AI Accuracy</div>
+                            <div className="text-center space-y-2">
+                                <div className="text-4xl font-bold">98%</div>
+                                <div className="text-white/80 text-lg">AI Accuracy</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold">24/7</div>
-                                <div className="text-white/80">AI Assistant</div>
+                            <div className="text-center space-y-2">
+                                <div className="text-4xl font-bold">24/7</div>
+                                <div className="text-white/80 text-lg">AI Assistant</div>
                             </div>
                         </div>
                     </div>

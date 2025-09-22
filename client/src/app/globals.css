@@ -141,6 +141,53 @@
   .search-glow {
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
   }
+
+  /* Chat Modal Animations */
+  .chat-modal-enter {
+    animation: chatModalEnter 0.5s ease-out forwards;
+  }
+
+  .chat-modal-exit {
+    animation: chatModalExit 0.3s ease-in forwards;
+  }
+
+  @keyframes chatModalEnter {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes chatModalExit {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+  }
+
+  /* Chat Button Animation */
+  .chat-button-enter {
+    animation: chatButtonEnter 0.6s ease-out forwards;
+  }
+
+  @keyframes chatButtonEnter {
+    from {
+      opacity: 0;
+      transform: translateY(100px) scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 }
 
 @keyframes pulse {

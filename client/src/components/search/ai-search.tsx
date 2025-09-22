@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Sparkles, Loader2, Mic, MicOff } from 'lucide-react';
+import { Search, Sparkles, Loader2, Mic, MicOff, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSearchStore } from '@/store/search-store';
 import { mockProducts } from '@/data/mock-products';
 import { Product } from '@/types';
+import { SearchCarousel } from './search-carousel';
 
 interface AISearchProps {
     onSearch: (query: string) => void;
@@ -19,6 +20,19 @@ export function AISearch({ onSearch, onResults }: AISearchProps) {
     const { filters, setQuery, voiceState } = useSearchStore();
     const [isProcessing, setIsProcessing] = useState(false);
     const [aiInsights, setAiInsights] = useState<string[]>([]);
+    const [showCarousel, setShowCarousel] = useState(false);
+
+    // Carousel suggestions
+    const carouselSuggestions = [
+        "Show me wireless headphones under $200",
+        "Find a comfortable office chair for long work sessions",
+        "I need a camera lens for portrait photography",
+        "What are the best gaming keyboards with RGB lighting?",
+        "Show me running shoes for flat feet under $150",
+        "Find eco-friendly clothing brands",
+        "I want a smartwatch with heart rate monitoring",
+        "Show me ergonomic furniture for home office"
+    ];
 
     // Mock AI search processing
     const processAISearch = async (query: string) => {
@@ -75,39 +89,80 @@ export function AISearch({ onSearch, onResults }: AISearchProps) {
         }
     }, [voiceState.transcript, voiceState.isListening]);
 
+    // Auto-start carousel when component mounts
+    useEffect(() => {
+        setShowCarousel(true);
+    }, []);
+
+    // Show carousel when input is focused and empty
+    const handleInputFocus = () => {
+        setShowCarousel(true);
+    };
+
+    const handleInputBlur = () => {
+        setTimeout(() => setShowCarousel(false), 200);
+    };
+
     return (
-        <div className="space-y-4">
-            {/* Search Input */}
+        <div className="w-full max-w-4xl mx-auto space-y-6">
+            {/* Search Input with Carousel */}
             <form onSubmit={handleSearch} className="relative">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <div className="relative group">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 z-10" />
+
+                    {/* Carousel Placeholder */}
+                    <SearchCarousel
+                        suggestions={carouselSuggestions}
+                        isVisible={showCarousel && !filters.query}
+                        onSuggestionClick={(suggestion) => {
+                            setQuery(suggestion);
+                            onSearch(suggestion);
+                            processAISearch(suggestion);
+                        }}
+                    />
+
                     <Input
                         type="text"
-                        placeholder="Ask AI anything... (e.g., 'Show me wireless headphones under $200')"
+                        placeholder={!showCarousel ? "Ask AI anything..." : ""}
                         value={filters.query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className="pl-10 pr-20 h-12 text-lg"
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                        className="pl-12 pr-32 h-16 text-lg border-2 border-white/20 bg-white/10  text-white focus:border-white/40 focus:bg-white/20 transition-all duration-300 rounded-2xl"
                     />
-                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+
+                    {/* Action Buttons */}
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
                         <Button
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8"
-                            disabled={!voiceState.transcript}
+                            className="h-10 w-10 text-white/80 hover:text-white hover:bg-white/20 rounded-full"
+                            onClick={() => {
+                                if (voiceState.isListening) {
+                                    // Stop listening logic here
+                                } else {
+                                    // Start listening logic here
+                                }
+                            }}
                         >
                             {voiceState.isListening ? (
-                                <MicOff className="h-4 w-4 text-red-500" />
+                                <MicOff className="h-5 w-5 text-red-400" />
                             ) : (
-                                <Mic className="h-4 w-4" />
+                                <Mic className="h-5 w-5" />
                             )}
                         </Button>
-                        <Button type="submit" size="sm" className="h-8 px-4">
+
+                        <Button
+                            type="submit"
+                            size="sm"
+                            className="h-10 px-6 bg-white text-gray-900 hover:bg-white/90 font-semibold rounded-full shadow-lg"
+                        >
                             {isProcessing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
                                 <>
-                                    <Sparkles className="h-4 w-4 mr-1" />
+                                    <Sparkles className="h-4 w-4 mr-2" />
                                     AI Search
                                 </>
                             )}
@@ -169,16 +224,10 @@ export function AISearch({ onSearch, onResults }: AISearchProps) {
             )}
 
             {/* Search Examples */}
-            <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">Try these AI searches:</p>
-                <div className="flex flex-wrap gap-2">
-                    {[
-                        'running shoes for flat feet under $150',
-                        'comfortable office chair for long work sessions',
-                        'camera lens for portrait photography',
-                        'wireless headphones with noise cancellation',
-                        'gaming keyboard with RGB lighting'
-                    ].map((example, index) => (
+            <div className="space-y-3">
+                <p className="text-sm font-medium text-white/80 text-center">Try these AI searches:</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                    {carouselSuggestions.slice(0, 4).map((example, index) => (
                         <Button
                             key={index}
                             variant="outline"
@@ -188,7 +237,7 @@ export function AISearch({ onSearch, onResults }: AISearchProps) {
                                 onSearch(example);
                                 processAISearch(example);
                             }}
-                            className="text-xs"
+                            className="text-xs bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 rounded-full px-4 py-2"
                         >
                             {example}
                         </Button>

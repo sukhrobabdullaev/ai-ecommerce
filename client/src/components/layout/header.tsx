@@ -47,9 +47,6 @@ export function Header() {
                         <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
                             Home
                         </Link>
-                        <Link href="/products" className="text-sm font-medium hover:text-primary transition-colors">
-                            Products
-                        </Link>
                         <Link href="/categories" className="text-sm font-medium hover:text-primary transition-colors">
                             Categories
                         </Link>
@@ -69,11 +66,11 @@ export function Header() {
                                 onChange={(e) => setQuery(e.target.value)}
                                 onFocus={() => setIsSearchFocused(true)}
                                 onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                                className="pl-10 pr-20 h-10 search-glow"
+                                className="pl-10 pr-20 h-10 rounded-full border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                             />
                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
                                 <VoiceSearch />
-                                <Button type="submit" size="sm" className="h-6 px-2">
+                                <Button type="submit" size="sm" className="h-6 px-3 rounded-full">
                                     Search
                                 </Button>
                             </div>

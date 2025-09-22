@@ -3,6 +3,7 @@
 import { Header } from './header';
 import { Footer } from './footer';
 import { CartSidebar } from './cart-sidebar';
+import { ChatButton } from '@/components/ai-chat/chat-button';
 import { Toaster } from '@/components/ui/sonner';
 
 interface MainLayoutProps {
@@ -18,6 +19,7 @@ export function MainLayout({ children }: MainLayoutProps) {
             </main>
             <Footer />
             <CartSidebar />
+            <ChatButton />
             <Toaster />
         </div>
     );
