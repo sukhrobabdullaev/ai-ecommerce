@@ -8,7 +8,6 @@ export const mockProducts: Product[] = [
       "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear sound quality.",
     price: 299.99,
     originalPrice: 399.99,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop",
@@ -38,7 +37,6 @@ export const mockProducts: Product[] = [
     description:
       "Advanced fitness tracking with heart rate monitoring, GPS, and 7-day battery life. Perfect for athletes and fitness enthusiasts.",
     price: 199.99,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1544117519-31a4b719223d?w=400&h=400&fit=crop",
@@ -65,7 +63,6 @@ export const mockProducts: Product[] = [
       "Premium ergonomic office chair with lumbar support, adjustable height, and breathable mesh back. Perfect for long work sessions.",
     price: 449.99,
     originalPrice: 599.99,
-    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=400&h=400&fit=crop",
@@ -91,7 +88,6 @@ export const mockProducts: Product[] = [
     description:
       "High-quality 85mm f/1.4 portrait lens with exceptional bokeh and sharpness. Perfect for professional photography.",
     price: 1299.99,
-    image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1554048612-b6a4d0a0b0b0?w=400&h=400&fit=crop",
@@ -117,7 +113,6 @@ export const mockProducts: Product[] = [
     description:
       "Soft, comfortable organic cotton t-shirt made from sustainable materials. Available in multiple colors and sizes.",
     price: 29.99,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1503341504253-dc44379e79c7?w=400&h=400&fit=crop",
@@ -143,7 +138,6 @@ export const mockProducts: Product[] = [
     description:
       "RGB backlit mechanical keyboard with Cherry MX switches, programmable keys, and anti-ghosting technology.",
     price: 149.99,
-    image: "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=400&fit=crop",
@@ -169,7 +163,6 @@ export const mockProducts: Product[] = [
     description: "Stunning 27-inch 4K IPS monitor with ultra-thin bezels, 99% sRGB coverage, and USB-C connectivity.",
     price: 349.99,
     originalPrice: 429.99,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?w=400&h=400&fit=crop",
@@ -194,7 +187,6 @@ export const mockProducts: Product[] = [
     name: "Standing Desk Pro",
     description: "Electric height-adjustable standing desk with memory presets and solid bamboo top.",
     price: 699.99,
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=400&h=400&fit=crop",
@@ -219,7 +211,6 @@ export const mockProducts: Product[] = [
     name: "Mirrorless Travel Camera",
     description: "Compact 24MP mirrorless camera with 4K video, IBIS, and kit lens. Ideal for creators on the go.",
     price: 999.99,
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=400&fit=crop",
@@ -244,7 +235,6 @@ export const mockProducts: Product[] = [
     name: "Running Shoes Pro",
     description: "Lightweight running shoes with responsive foam and breathable mesh for daily training.",
     price: 119.99,
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1519744346369-73f6f8b26169?w=400&h=400&fit=crop",
@@ -268,7 +258,6 @@ export const mockProducts: Product[] = [
     name: "Adjustable Dumbbell Set",
     description: "Space-saving adjustable dumbbells (5-52.5 lbs) for versatile home workouts.",
     price: 299.99,
-    image: "https://images.unsplash.com/photo-1598970434795-0c54fe7c0642?w=400&h=400&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1598970434795-0c54fe7c0642?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1596357395101-27025f58b0c1?w=400&h=400&fit=crop",
@@ -292,7 +281,6 @@ export const mockProducts: Product[] = [
     name: "Bestselling Tech Book",
     description: "A practical guide to modern web development patterns with TypeScript and React.",
     price: 39.99,
-    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0ea?w=400&h=400&fit=crop",
     images: ["https://images.unsplash.com/photo-1513475382585-d06e58bcb0ea?w=400&h=400&fit=crop"],
     category: "Books",
     brand: "PrintHouse",
@@ -313,7 +301,6 @@ export const mockProducts: Product[] = [
     name: "Design Systems Handbook",
     description: "Learn to build scalable design systems for web apps with modern tooling.",
     price: 29.99,
-    image: "https://images.unsplash.com/photo-1513938709626-033611b8cc03?w=400&h=400&fit=crop",
     images: ["https://images.unsplash.com/photo-1513938709626-033611b8cc03?w=400&h=400&fit=crop"],
     category: "Books",
     brand: "InkPress",
@@ -334,7 +321,6 @@ export const mockProducts: Product[] = [
     name: "Aromatic Scented Candle",
     description: "Hand-poured soy candle with lavender and vanilla notes for a cozy home ambience.",
     price: 19.99,
-    image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=400&fit=crop",
     images: ["https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=400&fit=crop"],
     category: "Home & Garden",
     brand: "HomeGlow",
@@ -355,7 +341,6 @@ export const mockProducts: Product[] = [
     name: "Indoor House Plant",
     description: "Low-maintenance indoor plant in a ceramic pot, perfect for brightening any room.",
     price: 24.99,
-    image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400&h=400&fit=crop",
     images: ["https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400&h=400&fit=crop"],
     category: "Home & Garden",
     brand: "GreenNest",

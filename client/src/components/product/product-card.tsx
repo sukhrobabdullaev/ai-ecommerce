@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, ShoppingCart, Star, Sparkles, Eye } from 'lucide-react';
@@ -19,12 +19,13 @@ interface ProductCardProps {
 
 export function ProductCard({ product, showAIRecommendation = false }: ProductCardProps) {
     const [imageIndex, setImageIndex] = useState(0);
-    const [isHovered, setIsHovered] = useState(false);
+    const [_isHovered, setIsHovered] = useState(false);
 
     const { addItem } = useCartStore();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
-
-    const isFav = isFavorite(product.id);
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    const isFav = mounted ? isFavorite(product.id) : false;
     const discountPercentage = product.originalPrice
         ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
         : 0;
@@ -52,7 +53,7 @@ export function ProductCard({ product, showAIRecommendation = false }: ProductCa
                     {/* Image Container */}
                     <div className="relative aspect-square overflow-hidden">
                         <Image
-                            src={product.images[imageIndex] || product.image}
+                            src={product.images[imageIndex]}
                             alt={product.name}
                             fill
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -100,9 +101,7 @@ export function ProductCard({ product, showAIRecommendation = false }: ProductCa
                                             className="h-8 w-8 bg-background/80 hover:bg-background"
                                             onClick={handleToggleFavorite}
                                         >
-                                            <Heart
-                                                className={`h-4 w-4 ${isFav ? 'fill-red-500 text-red-500' : ''}`}
-                                            />
+                                            <Heart className={`h-4 w-4 ${isFav ? 'fill-red-500 text-red-500' : ''}`} />
                                         </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
@@ -167,8 +166,8 @@ export function ProductCard({ product, showAIRecommendation = false }: ProductCa
                                     <Star
                                         key={i}
                                         className={`h-3 w-3 ${i < Math.floor(product.rating)
-                                                ? 'fill-yellow-400 text-yellow-400'
-                                                : 'text-gray-300'
+                                            ? 'fill-yellow-400 text-yellow-400'
+                                            : 'text-gray-300'
                                             }`}
                                     />
                                 ))}

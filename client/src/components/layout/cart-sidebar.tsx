@@ -55,7 +55,7 @@ export function CartSidebar() {
                                     <div key={item.product.id} className="flex space-x-4">
                                         <div className="relative h-20 w-20 flex-shrink-0">
                                             <Image
-                                                src={item.product.image}
+                                                src={item.product.images[0]}
                                                 alt={item.product.name}
                                                 fill
                                                 className="rounded-md object-cover"

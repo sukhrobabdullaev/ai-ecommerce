@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ShoppingCart, Heart, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,8 +12,10 @@ import { useFavoritesStore } from '@/store/favorites-store';
 export function Header() {
     const { getTotalItems, openCart } = useCartStore();
     const { getFavoriteCount } = useFavoritesStore();
-    const totalItems = getTotalItems();
-    const favoriteCount = getFavoriteCount();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    const totalItems = mounted ? getTotalItems() : 0;
+    const favoriteCount = mounted ? getFavoriteCount() : 0;
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -33,7 +36,7 @@ export function Header() {
                         <Button variant="ghost" size="icon" className="relative" asChild>
                             <Link href="/wishlist">
                                 <Heart className="h-5 w-5" />
-                                {favoriteCount > 0 && (
+                                {mounted && favoriteCount > 0 && (
                                     <Badge
                                         variant="destructive"
                                         className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
@@ -47,7 +50,7 @@ export function Header() {
                         {/* Cart */}
                         <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
                             <ShoppingCart className="h-5 w-5" />
-                            {totalItems > 0 && (
+                            {mounted && totalItems > 0 && (
                                 <Badge
                                     variant="destructive"
                                     className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"

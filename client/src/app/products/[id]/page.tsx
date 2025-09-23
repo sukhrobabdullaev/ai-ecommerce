@@ -38,7 +38,7 @@ export default function ProductDetailsPage() {
                     <Card className="overflow-hidden">
                         <div className="relative aspect-square">
                             <Image
-                                src={product.images[imageIndex] || product.image}
+                                src={product.images[imageIndex]}
                                 alt={product.name}
                                 fill
                                 className="object-cover"
