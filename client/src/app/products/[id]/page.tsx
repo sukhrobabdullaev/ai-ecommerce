@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useParams, notFound } from "next/navigation";
@@ -7,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sparkles, Star, Heart, ShoppingCart, Check } from "lucide-react";
+import { Sparkles, Star, Heart, ShoppingCart, Check, ArrowLeft, Home } from "lucide-react";
+import Link from "next/link";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { useRatingsStore } from "@/store/ratings-store";
@@ -24,39 +26,58 @@ export default function ProductDetailsPage() {
 
     const inCartQty = getItemQuantity(product.id);
     const isFav = isFavorite(product.id);
-    const discountPercentage = product.originalPrice
-        ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-        : 0;
-
     const userRating = getRating(product.id);
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {/* Breadcrumb Navigation */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <nav className="flex items-center space-x-2 text-sm text-muted-foreground">
+                    <Link href="/" className="flex items-center hover:text-primary">
+                        <Home className="h-4 w-4 mr-1" />
+                        <span className="hidden sm:inline">Home</span>
+                    </Link>
+                    <span className="hidden sm:inline">/</span>
+                    <Link href="/products" className="hover:text-primary">Products</Link>
+                    <span>/</span>
+                    <span className="text-foreground truncate max-w-[200px]">{product.name}</span>
+                </nav>
+                <Link href="/products">
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                        <ArrowLeft className="h-4 w-4 mr-2" />
+                        Back to Products
+                    </Button>
+                </Link>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Gallery */}
                 <div>
                     <Card className="overflow-hidden">
                         <div className="relative aspect-square">
-                            <Image
-                                src={product.images[imageIndex]}
-                                alt={product.name}
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                            {discountPercentage > 0 && (
-                                <Badge variant="destructive" className="absolute top-2 left-2">-{discountPercentage}%</Badge>
+                            {product.images && product.images.length > 0 ? (
+                                <Image
+                                    src={product.images[imageIndex]}
+                                    alt={product.name}
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-gray-200">
+                                    <ShoppingCart className="h-24 w-24 text-gray-400" />
+                                </div>
                             )}
-                            {!product.inStock && (
+                            {product.stock === 0 && (
                                 <Badge variant="outline" className="absolute top-2 right-2 bg-background/80">Out of Stock</Badge>
                             )}
-                            {product.aiRecommendation && (
-                                <Badge variant="secondary" className="absolute bottom-2 left-2 ai-gradient text-white border-0">
-                                    <Sparkles className="h-3 w-3 mr-1" /> AI Pick
+                            {product.tags.includes('premium') && (
+                                <Badge variant="secondary" className="absolute bottom-2 left-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                                    <Sparkles className="h-3 w-3 mr-1" /> Premium
                                 </Badge>
                             )}
                         </div>
-                        {product.images.length > 1 && (
+                        {product.images && product.images.length > 1 && (
                             <CardContent>
                                 <div className="mt-4 grid grid-cols-5 gap-2">
                                     {product.images.map((img, idx) => (
@@ -88,20 +109,22 @@ export default function ProductDetailsPage() {
                                         onClick={() => setRating(product.id, i + 1)}
                                         className="p-0.5"
                                     >
-                                        <Star className={`h-5 w-5 ${i < (userRating || Math.floor(product.rating)) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                                        <Star className={`h-5 w-5 ${i < (userRating || 4) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                                     </button>
                                 ))}
                             </div>
-                            <span className="text-sm text-muted-foreground">{product.rating.toFixed(1)} · {product.reviewCount} reviews</span>
+                            <span className="text-sm text-muted-foreground">4.2 · 128 reviews</span>
                             {userRating > 0 && (
                                 <span className="text-xs text-primary">Your rating: {userRating}★</span>
                             )}
                         </div>
 
                         <div className="flex items-end gap-3">
-                            <span className="text-3xl font-semibold">${product.price.toFixed(2)}</span>
-                            {product.originalPrice && (
-                                <span className="text-muted-foreground line-through">${product.originalPrice.toFixed(2)}</span>
+                            <span className="text-3xl font-semibold">${product.price}</span>
+                            {product.stock && product.stock > 0 && (
+                                <span className="text-sm text-green-600 font-medium">
+                                    {product.stock} in stock
+                                </span>
                             )}
                         </div>
 
@@ -114,9 +137,9 @@ export default function ProductDetailsPage() {
                         </div>
 
                         <div className="flex gap-3 pt-2">
-                            <Button size="lg" onClick={() => addItem(product)} disabled={!product.inStock}>
+                            <Button size="lg" onClick={() => addItem(product)} disabled={product.stock === 0}>
                                 <ShoppingCart className="h-4 w-4 mr-2" />
-                                {product.inStock ? (inCartQty > 0 ? `Added (${inCartQty})` : 'Add to Cart') : 'Out of Stock'}
+                                {product.stock && product.stock > 0 ? (inCartQty > 0 ? `Added (${inCartQty})` : 'Add to Cart') : 'Out of Stock'}
                             </Button>
                             <Button size="lg" variant={isFav ? "secondary" : "outline"} onClick={() => toggleFavorite(product)}>
                                 <Heart className={`h-4 w-4 mr-2 ${isFav ? 'fill-red-500 text-red-500' : ''}`} />
@@ -130,24 +153,39 @@ export default function ProductDetailsPage() {
                     <div className="grid sm:grid-cols-2 gap-6">
                         {/* Features */}
                         <div>
-                            <h2 className="font-semibold mb-3">Features</h2>
+                            <h2 className="font-semibold mb-3">Key Features</h2>
                             <ul className="space-y-2 text-sm">
-                                {product.features.map(feature => (
-                                    <li key={feature} className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />{feature}</li>
+                                {product.tags.slice(0, 5).map(feature => (
+                                    <li key={feature} className="flex items-center gap-2">
+                                        <Check className="h-4 w-4 text-primary" />
+                                        {feature.charAt(0).toUpperCase() + feature.slice(1)}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
 
                         {/* Specifications */}
                         <div>
-                            <h2 className="font-semibold mb-3">Specifications</h2>
-                            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                                {Object.entries(product.specifications).map(([key, value]) => (
-                                    <div key={key}>
-                                        <dt className="text-muted-foreground">{key}</dt>
-                                        <dd className="font-medium">{value}</dd>
+                            <h2 className="font-semibold mb-3">Product Details</h2>
+                            <dl className="space-y-3 text-sm">
+                                <div>
+                                    <dt className="text-muted-foreground">Category</dt>
+                                    <dd className="font-medium">{product.category}</dd>
+                                </div>
+                                {product.brand && (
+                                    <div>
+                                        <dt className="text-muted-foreground">Brand</dt>
+                                        <dd className="font-medium">{product.brand}</dd>
                                     </div>
-                                ))}
+                                )}
+                                <div>
+                                    <dt className="text-muted-foreground">Stock</dt>
+                                    <dd className="font-medium">{product.stock || 0} available</dd>
+                                </div>
+                                <div>
+                                    <dt className="text-muted-foreground">Price</dt>
+                                    <dd className="font-medium">${product.price}</dd>
+                                </div>
                             </dl>
                         </div>
                     </div>

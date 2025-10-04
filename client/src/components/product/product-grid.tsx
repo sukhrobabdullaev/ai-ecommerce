@@ -44,7 +44,6 @@ export function ProductGrid({
                 <ProductCard
                     key={product.id}
                     product={product}
-                    showAIRecommendation={showAIRecommendations}
                 />
             ))}
         </div>

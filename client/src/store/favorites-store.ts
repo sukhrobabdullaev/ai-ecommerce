@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Product } from "@/types";
+import { Product, WishlistItem } from "@/types";
 
 interface FavoritesStore {
-  items: Product[];
+  items: WishlistItem[];
 
   // Actions
   addToFavorites: (product: Product) => void;
@@ -23,18 +23,25 @@ export const useFavoritesStore = create<FavoritesStore>()(
 
       addToFavorites: (product: Product) => {
         set(state => {
-          if (state.items.find(item => item.id === product.id)) {
+          if (state.items.find(item => item.product.id === product.id)) {
             return state;
           }
+
+          const wishlistItem: WishlistItem = {
+            id: `wishlist_${product.id}_${Date.now()}`,
+            product,
+            addedAt: new Date(),
+          };
+
           return {
-            items: [...state.items, product],
+            items: [...state.items, wishlistItem],
           };
         });
       },
 
       removeFromFavorites: (productId: string) => {
         set(state => ({
-          items: state.items.filter(item => item.id !== productId),
+          items: state.items.filter(item => item.product.id !== productId),
         }));
       },
 
@@ -52,7 +59,7 @@ export const useFavoritesStore = create<FavoritesStore>()(
       },
 
       isFavorite: (productId: string) => {
-        return get().items.some(item => item.id === productId);
+        return get().items.some(item => item.product.id === productId);
       },
 
       getFavoriteCount: () => {
