@@ -43,7 +43,18 @@ export interface SearchFilters {
   brand?: string;
   priceRange: [number, number];
   tags?: string[];
-  sortBy: "relevance" | "price-low" | "price-high" | "newest";
+  inStock?: boolean;
+  rating?: number;
+  sortBy: "relevance" | "price-low" | "price-high" | "newest" | "rating";
+}
+
+export interface ProductFilters {
+  categories: string[];
+  brands: string[];
+  priceRange: [number, number];
+  tags: string[];
+  inStock?: boolean;
+  dateRange?: [Date, Date];
 }
 
 export interface VoiceSearchState {

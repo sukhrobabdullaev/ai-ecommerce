@@ -4,7 +4,8 @@ export const mockProducts: Product[] = [
   {
     id: "1",
     name: "Wireless Bluetooth Headphones",
-    description: "Premium noise-canceling wireless headphones with 30-hour battery life and superior sound quality.",
+    description:
+      "Premium noise-canceling wireless headphones with 30-hour battery life and superior sound quality.",
     price: 199.99,
     category: "Electronics",
     brand: "AudioTech",
@@ -21,7 +22,8 @@ export const mockProducts: Product[] = [
   {
     id: "2",
     name: "Smart Fitness Watch",
-    description: "Advanced fitness tracker with heart rate monitoring, GPS, and smartphone connectivity.",
+    description:
+      "Advanced fitness tracker with heart rate monitoring, GPS, and smartphone connectivity.",
     price: 299.99,
     category: "Wearables",
     brand: "FitTech",
@@ -38,7 +40,8 @@ export const mockProducts: Product[] = [
   {
     id: "3",
     name: "Gaming Mechanical Keyboard",
-    description: "RGB backlit mechanical gaming keyboard with customizable keys and ultra-fast response.",
+    description:
+      "RGB backlit mechanical gaming keyboard with customizable keys and ultra-fast response.",
     price: 149.99,
     category: "Gaming",
     brand: "GameGear",
@@ -55,7 +58,8 @@ export const mockProducts: Product[] = [
   {
     id: "4",
     name: "Portable Laptop Stand",
-    description: "Adjustable aluminum laptop stand for better ergonomics and improved airflow.",
+    description:
+      "Adjustable aluminum laptop stand for better ergonomics and improved airflow.",
     price: 79.99,
     category: "Accessories",
     brand: "ErgoPro",
@@ -72,7 +76,8 @@ export const mockProducts: Product[] = [
   {
     id: "5",
     name: "Wireless Charging Pad",
-    description: "Fast wireless charging pad compatible with all Qi-enabled devices.",
+    description:
+      "Fast wireless charging pad compatible with all Qi-enabled devices.",
     price: 39.99,
     category: "Electronics",
     brand: "ChargeTech",
@@ -89,7 +94,8 @@ export const mockProducts: Product[] = [
   {
     id: "6",
     name: "HD Webcam with Microphone",
-    description: "4K Ultra HD webcam with built-in noise-canceling microphone for video calls.",
+    description:
+      "4K Ultra HD webcam with built-in noise-canceling microphone for video calls.",
     price: 89.99,
     category: "Electronics",
     brand: "StreamPro",
@@ -106,7 +112,8 @@ export const mockProducts: Product[] = [
   {
     id: "7",
     name: "Bluetooth Portable Speaker",
-    description: "Waterproof Bluetooth speaker with 20-hour battery and 360-degree sound.",
+    description:
+      "Waterproof Bluetooth speaker with 20-hour battery and 360-degree sound.",
     price: 119.99,
     category: "Audio",
     brand: "SoundWave",
@@ -123,7 +130,8 @@ export const mockProducts: Product[] = [
   {
     id: "8",
     name: "USB-C Multi-Port Hub",
-    description: "7-in-1 USB-C hub with HDMI, USB 3.0 ports, SD card reader, and power delivery.",
+    description:
+      "7-in-1 USB-C hub with HDMI, USB 3.0 ports, SD card reader, and power delivery.",
     price: 59.99,
     category: "Accessories",
     brand: "ConnectHub",
@@ -140,7 +148,8 @@ export const mockProducts: Product[] = [
   {
     id: "9",
     name: "Ergonomic Office Chair",
-    description: "Comfortable ergonomic office chair with lumbar support and adjustable height.",
+    description:
+      "Comfortable ergonomic office chair with lumbar support and adjustable height.",
     price: 249.99,
     category: "Furniture",
     brand: "ComfortSeat",
@@ -157,7 +166,8 @@ export const mockProducts: Product[] = [
   {
     id: "10",
     name: "LED Desk Lamp",
-    description: "Adjustable LED desk lamp with multiple brightness levels and USB charging port.",
+    description:
+      "Adjustable LED desk lamp with multiple brightness levels and USB charging port.",
     price: 45.99,
     category: "Lighting",
     brand: "BrightDesk",
@@ -172,3 +182,17 @@ export const mockProducts: Product[] = [
     updatedAt: new Date("2024-01-10"),
   },
 ];
+
+// Extract unique categories for filters
+export const categories = [
+  "All",
+  ...Array.from(new Set(mockProducts.map((p) => p.category))),
+];
+
+// Extract unique brands for filters
+export const brands = Array.from(
+  new Set(mockProducts.map((p) => p.brand).filter(Boolean))
+) as string[];
+
+// Extract all unique tags for AI-powered filtering
+export const allTags = Array.from(new Set(mockProducts.flatMap((p) => p.tags)));
