@@ -3,6 +3,7 @@
 import { Header } from './header';
 import { Footer } from './footer';
 import { Toaster } from '@/components/ui/sonner';
+import { AIChat } from '@/components/ai-chat/ai-chat';
 
 interface MainLayoutProps {
     children: React.ReactNode;
@@ -18,6 +19,7 @@ export function MainLayout({ children, className = '' }: MainLayoutProps) {
             </main>
             <Footer />
             <Toaster />
+            <AIChat />
         </div>
     );
 }

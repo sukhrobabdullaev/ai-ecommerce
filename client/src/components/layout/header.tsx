@@ -66,8 +66,7 @@ export function Header() {
   const navigation = [
     { name: 'Home', href: '/', active: pathname === '/' },
     { name: 'Products', href: '/products', active: pathname.startsWith('/products') },
-    { name: 'Cart', href: '/cart', active: pathname === '/cart' },
-    { name: 'AI Chat', href: '/chat', active: pathname === '/chat' },
+    // { name: 'Cart', href: '/cart', active: pathname === '/cart' },
     { name: 'Wishlist', href: '/wishlist', active: pathname === '/wishlist' },
   ];
 
