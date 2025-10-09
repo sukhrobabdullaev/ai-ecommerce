@@ -88,17 +88,7 @@ export default function CheckoutPage() {
         }));
     };
 
-    const updateBillingAddress = (field: keyof Address, value: string) => {
-        setFormData(prev => ({
-            ...prev,
-            billingAddress: {
-                ...prev.billingAddress,
-                [field]: value,
-            },
-        }));
-    };
-
-    const updatePaymentMethod = (field: keyof PaymentMethod, value: any) => {
+    const updatePaymentMethod = (field: keyof PaymentMethod, value: string) => {
         setFormData(prev => ({
             ...prev,
             paymentMethod: {
@@ -173,9 +163,9 @@ export default function CheckoutPage() {
             // In a real app, you would redirect to order confirmation page
             console.log("Order created:", order);
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             toast.error("Unable to place order", {
-                description: err?.message || "An unexpected error occurred. Please try again.",
+                description: (err as Error)?.message || "An unexpected error occurred. Please try again.",
             });
         } finally {
             setPlacing(false);
@@ -369,7 +359,7 @@ export default function CheckoutPage() {
                                     <Label>Payment Method</Label>
                                     <RadioGroup
                                         value={formData.paymentMethod.type}
-                                        onValueChange={(value: any) => updatePaymentMethod('type', value)}
+                                        onValueChange={(value: string) => updatePaymentMethod('type', value)}
                                     >
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="card" id="card" />

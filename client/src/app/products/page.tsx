@@ -15,7 +15,7 @@ import { Card, CardContent } from '@/components/ui/card';
 export default function ProductsPage() {
     const { filters, setQuery } = useSearchStore();
     const [searchInput, setSearchInput] = useState(filters.query);
-    const [isProductsPage, setIsProductsPage] = useState(true);
+    const [isProductsPage] = useState(true);
 
     // Filter products based on current filters
     const filteredProducts = useMemo(() => {

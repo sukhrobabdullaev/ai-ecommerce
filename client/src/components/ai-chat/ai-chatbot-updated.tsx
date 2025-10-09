@@ -10,7 +10,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useCartStore } from '@/store/cart-store';
 import { useFavoritesStore } from '@/store/favorites-store';
-import { useSearchStore } from '@/store/search-store';
 
 // Types based on database models from PROJECT_MODELS.md
 type ChatType = 'TEXT' | 'AUDIO' | 'MIXED';
@@ -68,9 +67,8 @@ export function AIChatbotUpdated({ isOpen, onClose }: AIChatbotProps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSendMessageRef = useRef<any>(null);
 
-    const { addItem, removeItem, items: cartItems } = useCartStore();
-    const { addToFavorites, items: wishlistItems } = useFavoritesStore();
-    const { setQuery } = useSearchStore();
+    const { items: cartItems } = useCartStore();
+    const { items: wishlistItems } = useFavoritesStore();
 
     // Scroll to bottom when new messages arrive
     useEffect(() => {

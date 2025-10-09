@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,9 +19,6 @@ import { Sparkles, Brain, Zap, TrendingUp } from 'lucide-react';
  * This can be used for testing and showcasing the filtering system
  */
 export function FilteringDemo() {
-    const [activeDemo, setActiveDemo] = useState<'basic' | 'ai' | 'hybrid'>('basic');
-
-    // Example queries for testing
     const exampleQueries = [
         { query: 'wireless headphones', label: 'Basic Search' },
         { query: 'gaming keyboard under $200', label: 'Natural Language' },
@@ -307,7 +303,7 @@ export function FilteringDemo() {
                     <div className="flex flex-wrap gap-2">
                         {exampleQueries.map((example) => (
                             <Button key={example.query} variant="outline" size="sm">
-                                {example.label}: "{example.query}"
+                                {example.label}: {example.query}
                             </Button>
                         ))}
                     </div>

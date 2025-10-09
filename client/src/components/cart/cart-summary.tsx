@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { ShoppingBag, CreditCard } from 'lucide-react';
 
 export function CartSummary() {
-    const { items, getTotalItems, getTotalPrice } = useCartStore();
+    const { getTotalItems, getTotalPrice } = useCartStore();
 
     const totalItems = getTotalItems();
     const subtotal = getTotalPrice();

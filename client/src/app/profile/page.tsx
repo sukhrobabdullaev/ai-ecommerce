@@ -33,7 +33,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import { OrderStatus, PaymentStatus } from "@/types";
+import { OrderStatus } from "@/types";
 
 export default function ProfilePage() {
     const { user, session, logout, updateProfile, isLoading } = useAuthStore();
@@ -72,6 +72,7 @@ export default function ProfilePage() {
             await updateProfile(editData);
             setIsEditing(false);
             toast.success("Profile updated successfully!");
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             toast.error("Failed to update profile");
         }
