@@ -1,10 +1,9 @@
 import { create } from "zustand";
-import { SearchFilters, VoiceSearchState, AIRecommendation } from "@/types";
+import { SearchFilters, VoiceSearchState } from "@/types";
 
 interface SearchStore {
   filters: SearchFilters;
   voiceState: VoiceSearchState;
-  aiRecommendations: AIRecommendation[];
   isSearching: boolean;
   searchHistory: string[];
 
@@ -20,10 +19,6 @@ interface SearchStore {
   stopListening: () => void;
   setTranscript: (transcript: string) => void;
   setProcessing: (processing: boolean) => void;
-
-  // AI actions
-  setAIRecommendations: (recommendations: AIRecommendation[]) => void;
-  clearAIRecommendations: () => void;
 }
 
 const defaultFilters: SearchFilters = {
@@ -32,7 +27,7 @@ const defaultFilters: SearchFilters = {
   sortBy: "relevance",
 };
 
-export const useSearchStore = create<SearchStore>((set, get) => ({
+export const useSearchStore = create<SearchStore>((set) => ({
   filters: defaultFilters,
   voiceState: {
     isListening: false,
@@ -43,14 +38,14 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
   isSearching: false,
   searchHistory: [],
 
-  updateFilters: newFilters => {
-    set(state => ({
+  updateFilters: (newFilters) => {
+    set((state) => ({
       filters: { ...state.filters, ...newFilters },
     }));
   },
 
-  setQuery: query => {
-    set(state => ({
+  setQuery: (query) => {
+    set((state) => ({
       filters: { ...state.filters, query },
     }));
   },
@@ -59,11 +54,14 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
     set({ filters: defaultFilters });
   },
 
-  addToHistory: query => {
+  addToHistory: (query) => {
     if (!query.trim()) return;
 
-    set(state => {
-      const newHistory = [query, ...state.searchHistory.filter(item => item !== query)].slice(0, 10);
+    set((state) => {
+      const newHistory = [
+        query,
+        ...state.searchHistory.filter((item) => item !== query),
+      ].slice(0, 10);
       return { searchHistory: newHistory };
     });
   },
@@ -73,34 +71,26 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
   },
 
   startListening: () => {
-    set(state => ({
+    set((state) => ({
       voiceState: { ...state.voiceState, isListening: true, transcript: "" },
     }));
   },
 
   stopListening: () => {
-    set(state => ({
+    set((state) => ({
       voiceState: { ...state.voiceState, isListening: false },
     }));
   },
 
-  setTranscript: transcript => {
-    set(state => ({
+  setTranscript: (transcript) => {
+    set((state) => ({
       voiceState: { ...state.voiceState, transcript },
     }));
   },
 
-  setProcessing: processing => {
-    set(state => ({
+  setProcessing: (processing) => {
+    set((state) => ({
       voiceState: { ...state.voiceState, isProcessing: processing },
     }));
-  },
-
-  setAIRecommendations: recommendations => {
-    set({ aiRecommendations: recommendations });
-  },
-
-  clearAIRecommendations: () => {
-    set({ aiRecommendations: [] });
   },
 }));

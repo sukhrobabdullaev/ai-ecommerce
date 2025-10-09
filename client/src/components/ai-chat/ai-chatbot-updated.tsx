@@ -11,8 +11,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useCartStore } from '@/store/cart-store';
 import { useFavoritesStore } from '@/store/favorites-store';
 import { useSearchStore } from '@/store/search-store';
-import { mockProducts } from '@/data/mock-products';
-import { Product } from '@/types';
 
 // Types based on database models from PROJECT_MODELS.md
 type ChatType = 'TEXT' | 'AUDIO' | 'MIXED';

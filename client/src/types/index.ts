@@ -63,13 +63,6 @@ export interface VoiceSearchState {
   isProcessing: boolean;
 }
 
-export interface AIRecommendation {
-  productId: string;
-  reason: string;
-  confidence: number;
-  context: string;
-}
-
 // ====== WISHLIST TYPES ======
 export interface WishlistItem {
   id: string;

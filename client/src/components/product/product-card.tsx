@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, ShoppingCart } from 'lucide-react';
@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Product } from '@/types';
-import { useChatStore } from '@/store/chat-store';
 import { useCartStore } from '@/store/cart-store';
 import { useFavoritesStore } from '@/store/favorites-store';
 import { CartButtonText } from '@/components/cart/cart-button-text';
@@ -20,25 +19,14 @@ interface ProductCardProps {
 
 export function ProductCard({ product, className = '' }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
-  const { addMessage, currentSession } = useChatStore();
+  const [isMounted, setIsMounted] = useState(false); // 👈 new
+
   const { addItem, openCart } = useCartStore();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
 
-  const handleAddToChat = () => {
-    if (currentSession) {
-      addMessage({
-        role: 'USER',
-        content: `Tell me more about the ${product.name}`,
-        messageType: 'TEXT',
-        relatedProducts: [product.id],
-      });
-    }
-  };
-
-  const handleQuickView = () => {
-    // Could open a modal or navigate to product page
-    console.log('Quick view:', product.name);
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleAddToCart = () => {
     addItem(product);
@@ -51,6 +39,8 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
     toggleFavorite(product);
   };
 
+  // 👇 Don't render favorite UI until after mount
+  const favoriteActive = isMounted ? isFavorite(product?.id) : false;
 
   return (
     <Card className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg ${className}`}>
@@ -78,14 +68,14 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
             <Button
               variant="secondary"
               size="sm"
-              className={`h-8 w-8 rounded-full p-0 ${isFavorite(product.id)
+              className={`h-8 w-8 rounded-full p-0 ${favoriteActive
                 ? 'bg-red-500 hover:bg-red-600 text-white'
                 : 'bg-white/90 hover:bg-white text-gray-600'
                 }`}
               onClick={handleToggleFavorite}
-              title={isFavorite(product.id) ? "Remove from wishlist" : "Add to wishlist"}
+              title={favoriteActive ? "Remove from wishlist" : "Add to wishlist"}
             >
-              <Heart className={`h-4 w-4 ${isFavorite(product.id) ? 'fill-current' : ''}`} />
+              <Heart className={`h-4 w-4 ${favoriteActive ? 'fill-current' : ''}`} />
             </Button>
           </div>
         </div>
@@ -100,26 +90,22 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
       </div>
 
       <CardContent className="p-4">
-        {/* Brand */}
         {product.brand && (
           <p className="mb-1 text-xs text-muted-foreground">{product.brand}</p>
         )}
 
-        {/* Product Name */}
         <Link href={`/products/${product.id}`}>
           <h3 className="mb-2 line-clamp-2 text-sm font-medium transition-colors hover:text-primary">
             {product.name}
           </h3>
         </Link>
 
-        {/* Description */}
         <p className="mb-3 line-clamp-2 text-xs text-muted-foreground">
           {product.description}
         </p>
 
-        {/* Tags */}
         <div className="mb-3 flex flex-wrap gap-1">
-          {product.tags.slice(0, 3).map((tag) => (
+          {product.tags.slice(0, 2).map((tag) => (
             <Badge key={tag} variant="outline" className="text-xs">
               {tag}
             </Badge>
@@ -131,12 +117,10 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
           )}
         </div>
 
-        {/* Price */}
         <div className="mb-3">
           <span className="text-lg font-bold">${product.price}</span>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-2">
           <Button
             size="sm"

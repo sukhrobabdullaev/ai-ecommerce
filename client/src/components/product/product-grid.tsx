@@ -5,14 +5,14 @@ import { Product } from '@/types';
 
 interface ProductGridProps {
     products: Product[];
-    showAIRecommendations?: boolean;
+    isProductsPage?: boolean;
     columns?: 1 | 2 | 3 | 4 | 5;
 }
 
 export function ProductGrid({
     products,
-    showAIRecommendations = false,
-    columns = 4
+    columns = 4,
+    isProductsPage
 }: ProductGridProps) {
     const gridCols = {
         1: 'grid-cols-1',
@@ -39,7 +39,7 @@ export function ProductGrid({
     }
 
     return (
-        <div className={`grid ${gridCols[columns]} gap-6`}>
+        <div className={`grid ${isProductsPage ? gridCols[3] : gridCols[columns]} gap-6`}>
             {products.map((product) => (
                 <ProductCard
                     key={product.id}

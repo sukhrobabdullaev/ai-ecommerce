@@ -15,6 +15,7 @@ import { Card, CardContent } from '@/components/ui/card';
 export default function ProductsPage() {
     const { filters, setQuery } = useSearchStore();
     const [searchInput, setSearchInput] = useState(filters.query);
+    const [isProductsPage, setIsProductsPage] = useState(true);
 
     // Filter products based on current filters
     const filteredProducts = useMemo(() => {
@@ -74,7 +75,6 @@ export default function ProductsPage() {
                     </CardContent>
                 </Card>
             </div>
-            {/* <FilteringDemo /> */}
 
             {/* Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -102,7 +102,7 @@ export default function ProductsPage() {
                     </div>
 
                     {/* Products */}
-                    <ProductGrid products={filteredProducts} />
+                    <ProductGrid products={filteredProducts} isProductsPage={isProductsPage} />
                 </div>
             </div>
         </div>

@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetTrigger } from '@/components/ui/sheet';
 import { Filter } from 'lucide-react';
-import { SearchFilters } from '@/components/search/search-filters';
 
 export function FiltersPanel() {
     const [showFilters, setShowFilters] = useState(false);
@@ -18,13 +17,7 @@ export function FiltersPanel() {
                             Filters
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-80">
-                        <SearchFilters />
-                    </SheetContent>
                 </Sheet>
-            </div>
-            <div className="hidden lg:block">
-                <SearchFilters />
             </div>
         </div>
     );

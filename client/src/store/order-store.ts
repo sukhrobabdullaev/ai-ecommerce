@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Order, OrderItem, OrderStatus, PaymentStatus } from "@/types";
+import { Order, OrderStatus, PaymentStatus } from "@/types";
 
 interface OrderStore {
   orders: Order[];
@@ -68,7 +68,9 @@ const mockOrders: Order[] = [
           price: 199.99,
           category: "Electronics",
           brand: "AudioTech",
-          images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"],
+          images: [
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+          ],
           tags: ["wireless", "bluetooth", "noise-canceling"],
           stock: 25,
           createdAt: new Date("2024-01-01"),
@@ -123,7 +125,9 @@ const mockOrders: Order[] = [
           price: 149.99,
           category: "Gaming",
           brand: "GameGear",
-          images: ["https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400"],
+          images: [
+            "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400",
+          ],
           tags: ["gaming", "mechanical", "rgb"],
           stock: 30,
           createdAt: new Date("2024-01-03"),
@@ -178,7 +182,9 @@ const mockOrders: Order[] = [
           price: 299.99,
           category: "Wearables",
           brand: "FitTech",
-          images: ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"],
+          images: [
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+          ],
           tags: ["smartwatch", "fitness", "gps"],
           stock: 15,
           createdAt: new Date("2024-01-02"),
@@ -196,33 +202,37 @@ export const useOrderStore = create<OrderStore>()(
       currentOrder: null,
 
       addOrder: (order: Order) => {
-        set(state => ({
+        set((state) => ({
           orders: [order, ...state.orders],
         }));
       },
 
       updateOrderStatus: (orderId: string, status: OrderStatus) => {
-        set(state => ({
-          orders: state.orders.map(order =>
-            order.id === orderId ? { ...order, status, updatedAt: new Date() } : order,
+        set((state) => ({
+          orders: state.orders.map((order) =>
+            order.id === orderId
+              ? { ...order, status, updatedAt: new Date() }
+              : order
           ),
         }));
       },
 
       updatePaymentStatus: (orderId: string, status: PaymentStatus) => {
-        set(state => ({
-          orders: state.orders.map(order =>
-            order.id === orderId ? { ...order, paymentStatus: status, updatedAt: new Date() } : order,
+        set((state) => ({
+          orders: state.orders.map((order) =>
+            order.id === orderId
+              ? { ...order, paymentStatus: status, updatedAt: new Date() }
+              : order
           ),
         }));
       },
 
       getOrderById: (orderId: string) => {
-        return get().orders.find(order => order.id === orderId) || null;
+        return get().orders.find((order) => order.id === orderId) || null;
       },
 
       getOrdersByStatus: (status: OrderStatus) => {
-        return get().orders.filter(order => order.status === status);
+        return get().orders.filter((order) => order.status === status);
       },
 
       clearOrders: () => {
@@ -235,19 +245,24 @@ export const useOrderStore = create<OrderStore>()(
 
       getTotalSpent: () => {
         return get()
-          .orders.filter(order => order.paymentStatus === PaymentStatus.COMPLETED)
+          .orders.filter(
+            (order) => order.paymentStatus === PaymentStatus.COMPLETED
+          )
           .reduce((total, order) => total + order.total, 0);
       },
 
       getRecentOrders: (limit = 5) => {
         return get()
-          .orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .orders.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
           .slice(0, limit);
       },
     }),
     {
       name: "order-storage",
-      partialize: state => ({ orders: state.orders }),
-    },
-  ),
+      partialize: (state) => ({ orders: state.orders }),
+    }
+  )
 );
