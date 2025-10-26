@@ -1,36 +1,55 @@
-'use client';
+import { serverAPI } from '@/lib/server-api';
+import { ProductsPageClient } from '@/components/product/products-page-client';
+import { Sparkles } from 'lucide-react';
 
-import { ProductGrid } from '@/components/product/product-grid';
-import { ProductFilters } from '@/components/product/product-filters';
-import { mockProducts } from '@/data/mock-products';
-import { useSearchStore } from '@/store/search-store';
-import { filterProducts } from '@/lib/product-filters';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, Sparkles } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-// import { FilteringDemo } from '@/components/research/filtering-demo';
+interface ProductsPageProps {
+    searchParams: {
+        page?: string;
+        page_size?: string;
+        category_id?: string;
+        search?: string;
+        min_price?: string;
+        max_price?: string;
+        brand?: string;
+        in_stock_only?: string;
+    };
+}
 
-export default function ProductsPage() {
-    const { filters, setQuery } = useSearchStore();
-    const [searchInput, setSearchInput] = useState(filters.query);
-    const [isProductsPage] = useState(true);
-
-    // Filter products based on current filters
-    const filteredProducts = useMemo(() => {
-        return filterProducts(mockProducts, filters);
-    }, [filters]);
-
-    const handleSearch = () => {
-        setQuery(searchInput);
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+    // Parse search params
+    const page = parseInt(searchParams.page || '1');
+    const pageSize = parseInt(searchParams.page_size || '20');
+    const filters = {
+        page,
+        page_size: pageSize,
+        category_id: searchParams.category_id,
+        search: searchParams.search,
+        min_price: searchParams.min_price ? parseFloat(searchParams.min_price) : undefined,
+        max_price: searchParams.max_price ? parseFloat(searchParams.max_price) : undefined,
+        brand: searchParams.brand,
+        in_stock_only: searchParams.in_stock_only === 'true',
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
-    };
+    let productsData;
+    let categoriesData;
+
+    try {
+        // Fetch products and categories in parallel
+        const [productsResponse, categoriesResponse] = await Promise.all([
+            searchParams.search
+                ? serverAPI.searchProducts(searchParams.search, { page, page_size: pageSize })
+                : serverAPI.getProducts(filters),
+            serverAPI.getCategories({ page_size: 100 })
+        ]);
+
+        productsData = productsResponse;
+        categoriesData = categoriesResponse;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        // Fallback to empty data
+        productsData = { products: [], total: 0, page: 1, page_size: 20, total_pages: 0 };
+        categoriesData = { categories: [], total: 0, page: 1, page_size: 100, total_pages: 0 };
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -49,61 +68,12 @@ export default function ProductsPage() {
                     </div>
                 </div>
 
-                {/* Search Bar */}
-                <Card>
-                    <CardContent className="pt-6">
-                        <div className="flex gap-2">
-                            <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    placeholder="Search products by name, category, brand, or tags..."
-                                    value={searchInput}
-                                    onChange={(e) => setSearchInput(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    className="pl-10"
-                                />
-                            </div>
-                            <Button onClick={handleSearch}>
-                                Search
-                            </Button>
-                        </div>
-                        {filters.query && (
-                            <p className="text-sm text-muted-foreground mt-2">
-                                Searching for: <span className="font-semibold">{filters.query}</span>
-                            </p>
-                        )}
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                {/* Filters Sidebar */}
-                <aside className="lg:col-span-1">
-                    <div className="sticky top-4">
-                        <ProductFilters />
-                    </div>
-                </aside>
-
-
-                {/* Products Grid */}
-                <div className="lg:col-span-3 space-y-4">
-                    {/* Results Info */}
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm text-muted-foreground">
-                            Showing <span className="font-semibold">{filteredProducts.length}</span> of{' '}
-                            <span className="font-semibold">{mockProducts.length}</span> products
-                        </p>
-                        {filteredProducts.length > 0 && (
-                            <p className="text-xs text-muted-foreground">
-                                Sorted by: <span className="font-medium">{filters.sortBy}</span>
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Products */}
-                    <ProductGrid products={filteredProducts} isProductsPage={isProductsPage} />
-                </div>
+                {/* Client-side interactive components */}
+                <ProductsPageClient
+                    initialProducts={productsData.products}
+                    initialPagination={productsData}
+                    initialFilters={filters}
+                />
             </div>
         </div>
     );

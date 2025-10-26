@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext, useCallback } from "react";
+import React, { useState, useEffect, createContext, useContext, useCallback } from "react";
 import { User, LoginRequest, RegisterRequest, UserUpdate, AuthTokens } from "../types/auth";
 import { authAPI } from "../services/auth-api";
 

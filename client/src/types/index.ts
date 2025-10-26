@@ -16,19 +16,30 @@ export interface AuthSession {
   expiresAt: Date;
 }
 
-// ====== PRODUCT TYPES (Simplified) ======
+// ====== PRODUCT TYPES (Updated to match backend) ======
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  parent_id?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Product {
   id: string;
   name: string;
-  description: string;
-  price: number;
-  category: string;
+  description?: string;
+  price?: number;
+  category_id?: string;
+  category?: Category;
   brand?: string;
-  images: string[]; // Array of image URLs
-  tags: string[];
+  images?: string[]; // Array of image URLs
+  tags?: string[];
   stock?: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CartItem {
@@ -39,11 +50,11 @@ export interface CartItem {
 // ====== UI STATE TYPES ======
 export interface SearchFilters {
   query: string;
-  category?: string;
+  category_id?: string;
   brand?: string;
   priceRange: [number, number];
   tags?: string[];
-  inStock?: boolean;
+  in_stock_only?: boolean;
   rating?: number;
   sortBy: "relevance" | "price-low" | "price-high" | "newest" | "rating";
 }

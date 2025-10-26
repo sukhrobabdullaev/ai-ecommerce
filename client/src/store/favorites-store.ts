@@ -59,7 +59,7 @@ export const useFavoritesStore = create<FavoritesStore>()(
       },
 
       isFavorite: (productId: string) => {
-        return get().items.some(item => item.product.id === productId);
+        // return get().items.some(item => item.product.id === productId);
       },
 
       getFavoriteCount: () => {

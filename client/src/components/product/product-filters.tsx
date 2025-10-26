@@ -11,13 +11,16 @@ import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { useSearchStore } from '@/store/search-store';
-import { allTags, brands, categories } from '@/data/mock-products';
-import { Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
-import { useState } from 'react';
+import { useCategoryStore } from '@/store/category-store';
+import { useProductStore } from '@/store/product-store';
+import { Filter, X, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { SearchFilters } from '@/types';
 
 export function ProductFilters() {
     const { filters, updateFilters, clearFilters } = useSearchStore();
+    const { categories, isLoading: categoriesLoading, fetchCategories } = useCategoryStore();
+    const { products, fetchProducts } = useProductStore();
     const [expandedSections, setExpandedSections] = useState({
         price: true,
         category: true,
@@ -25,6 +28,19 @@ export function ProductFilters() {
         tags: false,
         stock: true,
     });
+
+    // Fetch categories on component mount
+    useEffect(() => {
+        fetchCategories({ active_only: true });
+    }, [fetchCategories]);
+
+    // Extract brands from products
+    const brands = Array.from(
+        new Set(products.map((p) => p.brand).filter(Boolean))
+    ) as string[];
+
+    // Extract tags from products
+    const allTags = Array.from(new Set(products.flatMap((p) => p.tags || [])));
 
     const toggleSection = (section: keyof typeof expandedSections) => {
         setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -34,8 +50,8 @@ export function ProductFilters() {
         updateFilters({ priceRange: [value[0], value[1]] });
     };
 
-    const handleCategoryChange = (category: string) => {
-        updateFilters({ category: category === 'All' ? undefined : category });
+    const handleCategoryChange = (categoryId: string) => {
+        updateFilters({ category_id: categoryId === 'all' ? undefined : categoryId });
     };
 
     const handleBrandChange = (brand: string) => {
@@ -176,21 +192,31 @@ export function ProductFilters() {
                         )}
                     </button>
                     {expandedSections.category && (
-                        <Select
-                            value={filters.category || 'All'}
-                            onValueChange={handleCategoryChange}
-                        >
-                            <SelectTrigger>
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {categories.map((category) => (
-                                    <SelectItem key={category} value={category}>
-                                        {category}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <div className="space-y-2">
+                            {categoriesLoading ? (
+                                <div className="flex items-center justify-center py-4">
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <span className="ml-2 text-sm text-muted-foreground">Loading categories...</span>
+                                </div>
+                            ) : (
+                                <Select
+                                    value={filters.category_id || 'all'}
+                                    onValueChange={handleCategoryChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="All Categories" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All Categories</SelectItem>
+                                        {categories.map((category) => (
+                                            <SelectItem key={category.id} value={category.id}>
+                                                {category.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        </div>
                     )}
                 </div>
 

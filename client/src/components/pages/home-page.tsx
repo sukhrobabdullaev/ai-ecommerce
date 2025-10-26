@@ -1,19 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Brain, Zap, Users, BarChart3 } from 'lucide-react';
+import { ArrowRight, Brain, Zap, Users, BarChart3, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ProductGrid } from '@/components/product/product-grid';
-import { mockProducts } from '@/data/mock-products';
+import { useProductStore } from '@/store/product-store';
 import { useChatStore } from '@/store/chat-store';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 
 export function HomePage() {
-  const [featuredProducts] = useState(mockProducts.slice(0, 8));
+  const { products, isLoading, error, fetchProducts } = useProductStore();
   const { createSession } = useChatStore();
+
+  // Fetch featured products on component mount
+  useEffect(() => {
+    fetchProducts({ page: 1, page_size: 8 });
+  }, [fetchProducts]);
+
+  const featuredProducts = products.slice(0, 8);
 
 
   const handleStartAIChat = () => {
@@ -146,7 +154,18 @@ export function HomePage() {
           </Button>
         </div>
 
-        <ProductGrid products={featuredProducts} />
+        {error ? (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        ) : isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <span className="ml-2">Loading featured products...</span>
+          </div>
+        ) : (
+          <ProductGrid products={featuredProducts} />
+        )}
       </section>
 
       {/* CTA Section */}

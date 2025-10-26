@@ -83,7 +83,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
         {/* Category Badge */}
         <div className="absolute left-2 top-2">
           <Badge variant="secondary" className="text-xs">
-            {product.category}
+            {product.category?.name}
           </Badge>
         </div>
 
@@ -105,12 +105,12 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
         </p>
 
         <div className="mb-3 flex flex-wrap gap-1">
-          {product.tags.slice(0, 2).map((tag) => (
+          {product.tags?.slice(0, 2).map((tag) => (
             <Badge key={tag} variant="outline" className="text-xs">
               {tag}
             </Badge>
           ))}
-          {product.tags.length > 3 && (
+          {product.tags?.length && product.tags.length > 3 && (
             <Badge variant="outline" className="text-xs">
               +{product.tags.length - 3}
             </Badge>
