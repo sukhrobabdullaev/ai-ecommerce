@@ -117,6 +117,11 @@ def main():
                 })
 
     print(f"  Total chunks: {len(all_chunks_text):,}")
+    if not all_chunks_text:
+        raise ValueError(
+            "No review chunks were generated. Check item_reviews.json content "
+            "or adjust chunking thresholds (CHUNK_SIZE / MIN_CHUNK_TOKENS)."
+        )
 
     # Embed in batches
     print(f"\nEmbedding {len(all_chunks_text):,} chunks with {EMBED_MODEL}...")

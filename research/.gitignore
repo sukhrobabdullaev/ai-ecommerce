@@ -1,5 +1,7 @@
 data/
 venv/
+.venv/
+results/
 __pycache__/
 *.pkl
 *.bin

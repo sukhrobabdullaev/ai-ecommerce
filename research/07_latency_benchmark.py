@@ -73,7 +73,10 @@ def llm_call(client, messages):
             if attempt < MAX_RETRIES - 1:
                 time.sleep(2 ** attempt)
             else:
-                return ""
+                raise RuntimeError(
+                    f"LLM API call failed after {MAX_RETRIES} retries: {e}"
+                ) from e
+    return ""  # unreachable
 
 
 def embed_single(client, text):
@@ -125,7 +128,7 @@ def measure_rag_latency(client, faiss_index, chunk_metadata, user_histories, use
 
         t0 = time.perf_counter()
         query_vec = embed_single(client, query_text)
-        distances, indices = faiss_index.search(query_vec, RAG_TOP_CHUNKS)
+        _distances, indices = faiss_index.search(query_vec, RAG_TOP_CHUNKS)
         retrieved_chunks = [
             chunk_metadata[idx]["text"]
             for idx in indices[0]

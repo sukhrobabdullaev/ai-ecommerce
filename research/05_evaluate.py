@@ -154,7 +154,10 @@ def llm_call(client: OpenAI, prompt: str) -> str:
             if attempt < MAX_RETRIES - 1:
                 time.sleep(2 ** attempt)
             else:
-                return ""
+                raise RuntimeError(
+                    f"LLM API call failed after {MAX_RETRIES} retries: {e}"
+                ) from e
+    return ""  # unreachable, satisfies type checkers
 
 
 def parse_ranked_titles(text: str) -> list[str]:
@@ -234,7 +237,9 @@ def evaluate_rag(
         titles = parse_ranked_titles(output)
         rec_ids = titles_to_item_ids(titles, title_map)
 
-        relevant = set(test_df[test_df["user_id"] == uid][test_df["label"] == 1]["item_id"])
+        relevant = set(
+            test_df.loc[(test_df["user_id"] == uid) & (test_df["label"] == 1), "item_id"]
+        )
         recs[uid] = (rec_ids, relevant)
 
     return compute_metrics(recs), recs
@@ -286,7 +291,9 @@ def evaluate_prompting(
         titles = parse_ranked_titles(output)
         rec_ids = titles_to_item_ids(titles, title_map)
 
-        relevant = set(test_df[test_df["user_id"] == uid][test_df["label"] == 1]["item_id"])
+        relevant = set(
+            test_df.loc[(test_df["user_id"] == uid) & (test_df["label"] == 1), "item_id"]
+        )
         recs[uid] = (rec_ids, relevant)
 
     return compute_metrics(recs), recs
@@ -445,22 +452,18 @@ def main():
         ("RAG + GPT-3.5", rag_recs),
         ("Zero-Shot GPT-3.5", prompt_recs),
     ]:
-        pop_ndcg = {}
+        pop_ndcg: dict[str, list[float]] = {}
         for uid, (rec, rel) in recs_dict.items():
-            for iid in rec[:K]:
-                n_pop = item_popularity.get(iid, 0)
-                grp = item_popularity_group(n_pop)
-                if grp not in pop_ndcg:
-                    pop_ndcg[grp] = []
             ndcg = ndcg_at_k(rec, rel, K)
-            # Assign to group based on test positive item popularity
+            # Assign NDCG to the popularity bucket of each test-positive item
             for iid in rel:
                 n_pop = item_popularity.get(iid, 0)
                 grp = item_popularity_group(n_pop)
                 pop_ndcg.setdefault(grp, []).append(ndcg)
 
         for grp, vals in pop_ndcg.items():
-            pop_rows.append({"Model": model_name, "Group": grp, "NDCG@10": round(np.mean(vals), 4)})
+            if vals:  # guard against empty list → no NaN
+                pop_rows.append({"Model": model_name, "Group": grp, "NDCG@10": round(np.mean(vals), 4)})
 
     pop_df = pd.DataFrame(pop_rows)
     if not pop_df.empty:

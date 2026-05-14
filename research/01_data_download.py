@@ -29,7 +29,6 @@ def download_reviews() -> pd.DataFrame:
         "McAuley-Lab/Amazon-Reviews-2023",
         "raw_review_Electronics",
         split="full",
-        trust_remote_code=True,
     )
     df = ds.to_pandas()
     print(f"  Raw reviews: {len(df):,} rows")
@@ -59,7 +58,6 @@ def download_meta() -> pd.DataFrame:
         "McAuley-Lab/Amazon-Reviews-2023",
         "raw_meta_Electronics",
         split="full",
-        trust_remote_code=True,
     )
     df = ds.to_pandas()
     print(f"  Raw meta: {len(df):,} rows")
@@ -125,7 +123,7 @@ def main():
 
     meta_filtered = meta[meta["item_id"].isin(filtered["item_id"].unique())].copy()
 
-    print(f"\nFinal dataset:")
+    print("\nFinal dataset:")
     print(f"  Interactions : {len(filtered):,}")
     print(f"  Users        : {filtered['user_id'].nunique():,}")
     print(f"  Items        : {filtered['item_id'].nunique():,}")

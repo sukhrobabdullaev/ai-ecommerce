@@ -457,7 +457,7 @@ def main():
         train_feat.to_parquet(out_train, index=False)
         print(f"Saved {out_train}")
     else:
-        print(f"train_features.parquet already exists — skipping")
+        print("train_features.parquet already exists — skipping")
 
     # Build val candidates
     out_val = DATA_DIR / "val_candidates.parquet"
@@ -468,7 +468,7 @@ def main():
         val_feat.to_parquet(out_val, index=False)
         print(f"Saved {out_val}")
     else:
-        print(f"val_candidates.parquet already exists — skipping")
+        print("val_candidates.parquet already exists — skipping")
 
     # Build test candidates
     out_test = DATA_DIR / "test_candidates.parquet"
@@ -479,7 +479,7 @@ def main():
         test_feat.to_parquet(out_test, index=False)
         print(f"Saved {out_test}")
     else:
-        print(f"test_candidates.parquet already exists — skipping")
+        print("test_candidates.parquet already exists — skipping")
 
     # User histories for LLM pipelines
     out_hist = DATA_DIR / "user_histories.json"
